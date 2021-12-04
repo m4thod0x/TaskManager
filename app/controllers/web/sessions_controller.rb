@@ -11,6 +11,7 @@ class Web::SessionsController < Web::ApplicationController
       redirect_to :board
     else
       render :new
+    end
   end
 
   def destroy
