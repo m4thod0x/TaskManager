@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import Board from "@asseinfo/react-kanban";
 import "@asseinfo/react-kanban/dist/styles.css";
 import { propOr } from "ramda";
