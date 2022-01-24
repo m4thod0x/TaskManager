@@ -10,6 +10,7 @@ import CardHeader from '@material-ui/core/CardHeader';
 import CloseIcon from '@material-ui/icons/Close';
 import IconButton from '@material-ui/core/IconButton';
 import Modal from '@material-ui/core/Modal';
+import CircularProgress from '@material-ui/core/CircularProgress';
 
 import Form from './components/Form';
 
@@ -95,7 +96,7 @@ const EditPopup = ({ cardId, onClose, onCardDestroy, onLoadCard, onCardUpdate })
 };
 
 EditPopup.propTypes = {
-  cardId: PropTypes.shape().isRequired,
+  cardId: PropTypes.number.isRequired,
   onClose: PropTypes.func.isRequired,
   onCardDestroy: PropTypes.func.isRequired,
   onLoadCard: PropTypes.func.isRequired,
