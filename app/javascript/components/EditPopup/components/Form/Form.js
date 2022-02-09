@@ -1,35 +1,49 @@
-import React from 'react';
-import PropTypes from 'prop-types';
-import { has } from 'ramda';
+import React from "react";
+import PropTypes from "prop-types";
+import { has } from "ramda";
 
-import TextField from '@material-ui/core/TextField';
-
-import useStyles from './useStyles';
+import TextField from "@material-ui/core/TextField";
+import UserSelect from "packs/components/UserSelect";
+import useStyles from "./useStyles";
 
 const Form = ({ errors, onChange, task }) => {
-  const handleChangeTextField = (fieldName) => (event) => onChange({ ...task, [fieldName]: event.target.value });
+  const handleChangeTextField = (fieldName) => (event) =>
+    onChange({ ...task, [fieldName]: event.target.value });
+
+  const handleChangeSelect = (fieldName) => (user) =>
+    onChange({ ...task, [fieldName]: user });
+
   const styles = useStyles();
 
   return (
     <form className={styles.root}>
       <TextField
-        error={has('name', errors)}
+        error={has("name", errors)}
         helperText={errors.name}
-        onChange={handleChangeTextField('name')}
+        onChange={handleChangeTextField("name")}
         value={task.name}
         label="Name"
         required
         margin="dense"
       />
       <TextField
-        error={has('description', errors)}
+        error={has("description", errors)}
         helperText={errors.description}
-        onChange={handleChangeTextField('description')}
+        onChange={handleChangeTextField("description")}
         value={task.description}
         label="Description"
         required
         multiline
         margin="dense"
+      />
+      <UserSelect
+        label="Author"
+        value={task.author}
+        onChange={handleChangeSelect("author")}
+        isDisabled
+        isRequired
+        error={has("author", errors)}
+        helperText={errors.author}
       />
     </form>
   );
