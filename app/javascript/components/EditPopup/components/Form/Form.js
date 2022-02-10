@@ -1,5 +1,7 @@
 import React from "react";
 import PropTypes from "prop-types";
+import TaskPresenter from "presenters/TaskPresenter";
+import UserPresenter from "presenters/UserPresenter";
 import { has } from "ramda";
 
 import TextField from "@material-ui/core/TextField";
@@ -21,7 +23,7 @@ const Form = ({ errors, onChange, task }) => {
         error={has("name", errors)}
         helperText={errors.name}
         onChange={handleChangeTextField("name")}
-        value={task.name}
+        value={TaskPresenter.name(task)}
         label="Name"
         required
         margin="dense"
@@ -30,7 +32,7 @@ const Form = ({ errors, onChange, task }) => {
         error={has("description", errors)}
         helperText={errors.description}
         onChange={handleChangeTextField("description")}
-        value={task.description}
+        value={TaskPresenter.description(task)}
         label="Description"
         required
         multiline
@@ -60,12 +62,12 @@ const Form = ({ errors, onChange, task }) => {
 
 Form.propTypes = {
   onChange: PropTypes.func.isRequired,
-  task: PropTypes.shape().isRequired,
+  task: TaskPresenter.shape().isRequired,
   errors: PropTypes.shape({
-    name: PropTypes.arrayOf(PropTypes.string),
-    description: PropTypes.arrayOf(PropTypes.string),
-    author: PropTypes.arrayOf(PropTypes.string),
-    assignee: PropTypes.arrayOf(PropTypes.string),
+    name: PropTypes.arrayOf(TaskPresenter.name()),
+    description: PropTypes.arrayOf(TaskPresenter.description()),
+    author: PropTypes.arrayOf(UserPresenter.shape()),
+    assignee: PropTypes.arrayOf(UserPresenter.shape()),
   }),
 };
 

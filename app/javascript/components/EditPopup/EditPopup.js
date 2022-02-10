@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import PropTypes from "prop-types";
+import TaskPresenter from "presenters/TaskPresenter";
 import { isNil } from "ramda";
 
 import Button from "@material-ui/core/Button";
@@ -68,7 +69,7 @@ const EditPopup = ({
           title={
             isLoading
               ? "Your task is loading. Please be patient."
-              : `Task # ${task.id} [${task.name}]`
+              : `Task # ${TaskPresenter.presentation(task)}`
           }
         />
         <CardContent>
