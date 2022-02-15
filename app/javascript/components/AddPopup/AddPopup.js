@@ -14,7 +14,7 @@ import TextField from "@material-ui/core/TextField";
 
 import TaskForm from "forms/TaskForm";
 
-import UserSelect from "packs/components/UserSelect";
+import UserSelect from "components/UserSelect";
 
 import useStyles from "./useStyles";
 

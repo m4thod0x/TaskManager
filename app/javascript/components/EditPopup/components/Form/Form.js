@@ -5,7 +5,7 @@ import UserPresenter from "presenters/UserPresenter";
 import { has } from "ramda";
 
 import TextField from "@material-ui/core/TextField";
-import UserSelect from "packs/components/UserSelect";
+import UserSelect from "components/UserSelect";
 import useStyles from "./useStyles";
 
 const Form = ({ errors, onChange, task }) => {

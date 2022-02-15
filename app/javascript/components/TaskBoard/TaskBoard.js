@@ -11,6 +11,7 @@ import ColumnHeader from "components/ColumnHeader";
 import AddPopup from "components/AddPopup";
 import TaskForm from "forms/TaskForm";
 import EditPopup from "components/EditPopup";
+import TaskPresenter from "presenters/TaskPresenter";
 
 import useStyles from "./useStyles";
 
@@ -25,9 +26,9 @@ const STATES = [
 ];
 
 const MODES = {
-  ADD: 'add',
-  NONE: 'none',
-  EDIT: 'edit',
+  ADD: "add",
+  NONE: "none",
+  EDIT: "edit",
 };
 
 const initialBoard = {
@@ -102,14 +103,16 @@ const TaskBoard = () => {
   };
 
   const handleCardDragEnd = (task, source, destination) => {
-    const transition = task.transitions.find(
+    const transition = TaskPresenter.transitions(task).find(
       ({ to }) => destination.toColumnId === to
     );
     if (!transition) {
       return null;
     }
 
-    return TasksRepository.update(task.id, {task: { stateEvent: transition.event }})
+    return TasksRepository.update(TaskPresenter.id(task), {
+      task: { stateEvent: transition.event },
+    })
       .then(() => {
         loadColumnInitial(destination.toColumnId);
         loadColumnInitial(source.fromColumnId);
@@ -122,20 +125,20 @@ const TaskBoard = () => {
   const handleOpenAddPopup = () => {
     setMode(MODES.ADD);
   };
-  
+
   const handleClose = () => {
     setMode(MODES.NONE);
     setOpenedTaskId(null);
   };
- 
+
   const handleTaskCreate = (params) => {
     const attributes = TaskForm.attributesToSubmit(params);
     return TasksRepository.create(attributes).then(({ data: { task } }) => {
-      loadColumnInitial(task.state);
+      loadColumnInitial(TaskPresenter.state(task));
       handleClose();
     });
   };
-  
+
   const loadTask = (id) => {
     return TasksRepository.show(id).then(({ data: { task } }) => task);
   };
@@ -143,39 +146,50 @@ const TaskBoard = () => {
   const handleTaskUpdate = (task) => {
     const attributes = TaskForm.attributesToSubmit(task);
 
-    return TasksRepository.update(task.id, attributes).then(() => {
-      loadColumnInitial(task.state);
-      handleClose();
-    });
+    return TasksRepository.update(TaskPresenter.id(task), attributes).then(
+      () => {
+        loadColumnInitial(TaskPresenter.state(task));
+        handleClose();
+      }
+    );
   };
 
   const handleTaskDestroy = (task) => {
-    return TasksRepository.destroy(task.id).then(() => {
-      loadColumnInitial(task.state);
+    return TasksRepository.destroy(TaskPresenter.id(task)).then(() => {
+      loadColumnInitial(TaskPresenter.state(task));
       handleClose();
     });
   };
 
-  const handleOpenEditPopup = task => {
-    setOpenedTaskId(task.id);
+  const handleOpenEditPopup = (task) => {
+    setOpenedTaskId(TaskPresenter.id(task));
     setMode(MODES.EDIT);
   };
-  
+
   return (
     <div>
-      <Fab className={styles.addButton} onClick={handleOpenAddPopup} color="primary" aria-label="add">
+      <Fab
+        className={styles.addButton}
+        onClick={handleOpenAddPopup}
+        color="primary"
+        aria-label="add"
+      >
         <AddIcon />
       </Fab>
       <Board
         renderColumnHeader={(column) => (
           <ColumnHeader column={column} onLoadMore={loadColumnMore} />
         )}
-        renderCard={card => <Task onClick={handleOpenEditPopup} task={card} />}
+        renderCard={(card) => (
+          <Task onClick={handleOpenEditPopup} task={card} />
+        )}
         onCardDragEnd={handleCardDragEnd}
       >
         {board}
       </Board>
-      {mode === MODES.ADD && <AddPopup onCreateCard={handleTaskCreate} onClose={handleClose} />}
+      {mode === MODES.ADD && (
+        <AddPopup onCreateCard={handleTaskCreate} onClose={handleClose} />
+      )}
       {mode === MODES.EDIT && (
         <EditPopup
           onLoadCard={loadTask}
