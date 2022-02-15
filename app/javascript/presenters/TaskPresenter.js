@@ -1,4 +1,4 @@
-import PropTypes, { object, string } from "prop-types";
+import PropTypes from "prop-types";
 import PropTypesPresenter from "utils/PropTypesPresenter";
 
 export default new PropTypesPresenter(
@@ -7,7 +7,7 @@ export default new PropTypesPresenter(
     name: PropTypes.string,
     description: PropTypes.string,
     state: PropTypes.string,
-    transitions: PropTypes.arrayOf(object),
+    transitions: PropTypes.array,
     expiredAt: PropTypes.instanceOf(Date),
   },
   {
